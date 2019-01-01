@@ -1,0 +1,432 @@
+##############################################################################
+#
+# FntDemo.eal
+#            
+# This is a demonstration application that simply shows the use of the
+# FntDemo.dll subroutines "ChangeHANDLE_FontToPOINTS_FACE_"
+# and "ErrMsgFromChangeHANDLEFont."
+#            
+
+screen size 640 480     
+
+include "accel.inc"
+include "fileio.inc"
+include "message.inc"    
+
+##############################################################################
+#
+# subroutine/function declarations
+#            
+
+include "fntdemo.inc"  
+  
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+subroutine Initialize
+    (
+    )
+subroutine ChangeObjectAttrs
+    ( string  : ObjectName
+    , string  : FontName
+    , string  : ColorName
+    , string  : WhatPP  
+    )   
+subroutine ChangeFont 
+    ( string  : ObjectName
+    , string  : FontName
+    )   
+subroutine ChangeColor
+    ( string  : ObjectName
+    , string  : ColorName
+    , string  : WhatPP
+    )   
+##############################################################################
+#
+# Primary Window Region Definition
+#
+
+enabled invisible primary dialog region PrimaryWindow
+    size 330 202 
+    at position 10 10
+    size border
+    title bar "FntDemo"
+    vertical   scroll bar scroll by 8
+    horizontal scroll bar scroll by 8
+    system menu
+#   maximize button
+
+enabled visible checked radio button RB1
+    size 180 16 
+    at position  0 165
+    in PrimaryWindow 
+    group is G_RB
+    text "Sample radio RB1"
+
+disabled visible         radio button RB2
+    size 180 16 
+    at position  0 149
+    in PrimaryWindow 
+    group is G_RB
+    text "Disabled radio RB2"
+
+enabled visible check box   CB
+    size 180 16 
+    at position  0 133
+    in PrimaryWindow 
+    text "Sample checkbox CB"
+
+enabled visible static text ST
+    size 180 20 
+    at position  0 113
+    in PrimaryWindow 
+    left align top align
+    text "Sample static text ST"
+
+enabled visible entry field EF
+    size 180 28               
+    at position  0 85 
+    in PrimaryWindow
+    text "Sample entry field EF"
+
+enabled visible list box LB
+    size 180 60
+    at position 0  25
+    in PrimaryWindow   
+    horizontal scroll bar
+    insert "This is listbox LB"
+    insert "abcdefghijklmnopqrstuvwxyz"
+    insert "nopqrstuvwxyzabcdefghijklm"
+    insert "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    insert "NOPQRSTUVWXYZABCDEFGHIJKLM"
+    insert "`~!@#$%^&*()-_=+[]{}\\|;:'\",.<>/?"
+    insert "0123456789"
+
+disabled visible         push button PB1
+    size  83 24
+    at position 5    0 
+    in PrimaryWindow
+    text "~Disabled"
+
+enabled visible         push button PB2
+    size  83 24
+    at position 94   0 
+    in PrimaryWindow
+    text "~Enabled"
+
+enabled visible static text ST_What
+    size 140 12 
+    at position  190 165
+    in PrimaryWindow 
+    left align top align
+    text "Select a window part:"
+           
+enabled visible dropdown list DL_What
+    size 140 80
+    at   190  85
+    in PrimaryWindow
+    text size 17 columns
+    text "foreground"
+    insert "foreground"
+    insert "background"
+    insert "border"
+    insert "hilite foreground"
+    insert "hilite background"
+    insert "disabled foreground"
+    insert "disabled background"
+
+enabled visible static text ST_Color
+    size 140 12 
+    at position  190 129
+    in PrimaryWindow 
+    left align top align
+    text "...and its color:"
+
+enabled visible dropdown list DL_Color
+    size 140 80
+    at   190 49
+    in PrimaryWindow
+    text size 17 columns
+    text "default"
+    insert "default"
+    insert "red"
+    insert "green"
+    insert "yellow"
+    insert "blue"
+    insert "magenta"
+    insert "cyan"
+    insert "white"
+    insert "black"
+    insert "dark gray"
+    insert "dark blue"
+    insert "dark red"
+    insert "dark magenta"
+    insert "dark green"
+    insert "dark cyan"
+    insert "dark yellow"
+    insert "pale gray"
+    insert "window background"
+    insert "window text"
+
+enabled visible static text ST_font
+    size 140 12 
+    at position  190  93
+    in PrimaryWindow 
+    left align top align
+    text "...and the font, e.g. \"12.Helv\":"
+
+enabled visible entry field EF_font
+    size 140 12               
+    at position  190  81
+    in PrimaryWindow
+
+enabled visible static text ST_results
+    size 140 12 
+    at position  190  69
+    in PrimaryWindow 
+    left align top align
+    text "Results:"
+
+enabled visible list box LB_results
+    size 140 44
+    at position 190 25
+    in PrimaryWindow   
+    horizontal scroll bar
+
+enabled visible default push button PB_Apply
+    size 60 24
+    at position 190  0 
+    in PrimaryWindow
+    text "~Apply"
+           
+enabled visible group box GB_sepV
+    size 1 187              
+    at position  187 0 
+    in PrimaryWindow
+
+enabled visible group box GB_sepH
+    size 330 5            
+    at position  0 183 
+    in PrimaryWindow
+
+enabled visible static text ST_topinstr
+    size 330 18 
+    at position  0  184
+    in PrimaryWindow 
+    left align top align word wrap
+    text "Select your choices for presentation parameters from the section below right.  The section below left will show the changed appearance."
+
+##############################################################################
+#
+# common variable definitions  
+#            
+integer
+    Handle        
+
+string 
+    FontName                              
+    ColorName                              
+    ObjectName                            
+    WhatPP        
+
+##############################################################################
+#
+# responses
+#              
+response to start 
+    call Initialize ()
+    make PrimaryWindow visible
+
+response to PB_Apply
+
+    copy text of EF_font to FontName
+    copy text of DL_Color to ColorName
+    copy text of DL_What  to WhatPP
+    clear LB_results
+
+    copy "LB"  to ObjectName 
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "EF"  to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "PB1"  to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "PB2"  to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "ST"  to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "CB"  to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "RB1" to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )
+
+    copy "RB2" to ObjectName
+    call ChangeObjectAttrs ( ObjectName, FontName, ColorName, WhatPP )     
+
+
+##############################################################################
+#
+# subroutine definitions
+#     
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+subroutine Initialize () is
+    string  FontName
+    integer ColorNumber
+    integer Handle
+    copy "8.Courier" to FontName
+    copy handle of LB_results to Handle
+    call ChangeHANDLE_FontToPOINTSFACE_ ( Handle, FontName ) 
+    copy "10.Helv" to FontName
+    copy handle of ST_topinstr to Handle
+    call ChangeHANDLE_FontToPOINTSFACE_ ( Handle, FontName ) 
+    copy 3 to ColorNumber # 3=yellow
+    call MakeHANDLE_BackCOLOR_ ( Handle, ColorNumber )
+#   end subroutine
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+subroutine ChangeObjectAttrs
+    ( string  : ObjectName
+    , string  : FontName
+    , string  : ColorName
+    , string  : WhatPP
+    ) is            
+
+    integer Handle
+    string  Error  
+    string  ErrorLogMsg
+
+    call ChangeFont ( ObjectName, FontName )
+    call ChangeColor ( ObjectName, ColorName, WhatPP )
+#   end subroutine
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+subroutine ChangeFont 
+    ( string  : ObjectName
+    , string  : FontName
+    ) is            
+
+    integer Handle
+    string  Error  
+    string  ErrorLogMsg
+
+    copy handle of (ObjectName) to Handle  
+    if ( FontName != "" ) then
+        call ChangeHANDLE_FontToPOINTSFACE_ ( Handle, FontName ) 
+    else
+        call ChangeHANDLE_FontToDefault ( Handle ) 
+        end if
+    copy ObjectName 
+        " " errorlevel 
+        " Error=<" ErrMsgFromChangeHANDLEFont ( errorlevel ) ">" 
+        " font=<" FontName ">" 
+        to ErrorLogMsg
+    add to LB_results insert ErrorLogMsg
+####send ErrorLogMsg to errorlog
+#   end subroutine
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+subroutine ChangeColor
+    ( string  : ObjectName
+    , string  : ColorName
+    , string  : WhatPP
+    ) is            
+
+    integer Handle
+    string  Error  
+    string  ErrorLogMsg
+    integer ColorNumber
+
+    copy handle of (ObjectName) to Handle 
+    switch ColorName is
+        case char col 1 "default" is
+            copy  0 to ColorNumber
+        case char col 1 "red" is
+            copy  1 to ColorNumber
+        case char col 1 "green" is
+            copy  2 to ColorNumber
+        case char col 1 "yellow" is
+            copy  3 to ColorNumber
+        case char col 1 "blue" is
+            copy  4 to ColorNumber
+        case char col 1 "magenta" is
+            copy  5 to ColorNumber
+        case char col 1 "cyan" is
+            copy  6 to ColorNumber
+        case char col 1 "white" is
+            copy  7 to ColorNumber
+        case char col 1 "black" is
+            copy  8 to ColorNumber
+        case char col 1 "dark gray" is
+            copy 18 to ColorNumber
+        case char col 1 "dark blue" is
+            copy 19 to ColorNumber
+        case char col 1 "dark red" is
+            copy 20 to ColorNumber
+        case char col 1 "dark magenta" is
+            copy 21 to ColorNumber
+        case char col 1 "dark green" is
+            copy 22 to ColorNumber
+        case char col 1 "dark cyan" is
+            copy 23 to ColorNumber
+        case char col 1 "dark yellow" is
+            copy 24 to ColorNumber
+        case char col 1 "pale gray" is
+            copy 25 to ColorNumber
+        case char col 1 "window background" is
+            copy 26 to ColorNumber
+        case char col 1 "window text" is
+            copy 27 to ColorNumber     
+        default is
+        end switch 
+         
+    switch WhatPP is
+        case char col 1 "foreground" is
+            if  ( ColorNumber = 0 ) then 
+                copy 27 to ColorNumber
+                end if
+            call MakeHANDLE_ForeCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "background" is
+            if  ( ColorNumber = 0 ) then 
+                copy 26 to ColorNumber
+                end if
+            call MakeHANDLE_BackCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "hilite foreground" is
+            if  ( ColorNumber = 0 ) then 
+                copy 26 to ColorNumber
+                end if
+            call MakeHANDLE_HiliteForeCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "hilite background" is
+            if  ( ColorNumber = 0 ) then 
+                copy 27 to ColorNumber
+                end if
+            call MakeHANDLE_HiliteBackCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "disabled foreground" is
+            if  ( ColorNumber = 0 ) then 
+                copy 25 to ColorNumber
+                end if
+            call MakeHANDLE_DisabledForeCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "disabled background" is
+            if  ( ColorNumber = 0 ) then 
+                copy 26 to ColorNumber
+                end if
+            call MakeHANDLE_DisabledBackCOLOR_ ( Handle, ColorNumber )
+        case char col 1 "border" is
+            if  ( ColorNumber = 0 ) then 
+                copy 27 to ColorNumber
+                end if
+            call MakeHANDLE_BorderCOLOR_ ( Handle, ColorNumber )
+        default is
+        end switch 
+
+    copy ObjectName 
+        " " errorlevel 
+        " Error=<" ErrMsgFromMakeHANDLECOLOR ( errorlevel ) ">" 
+        " attr=<" WhatPP ">" 
+        " color=<" ColorName ">" 
+        to ErrorLogMsg
+    add to LB_results insert ErrorLogMsg
+####send ErrorLogMsg to errorlog
+#   end subroutine
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+

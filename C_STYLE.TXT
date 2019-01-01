@@ -1,0 +1,152 @@
+
+
+ The somewhat unorthodox 'C' style used in this program was developed
+ for reasons of clarity and portability.  The three primary differences
+ from commonly employed styles that you will note are:
+ 
+ 
+ 1.  There is no use of the "//" comment delimiter for comments at
+     the end of a line.  This practice does not, unfortunately,
+     conform to the ANSI 'C' standard.  However, it is still a nuisance
+     to have to add the closing asterisk-slash at the end of comment
+     lines, so the style you see here was adopted.  It has the 
+     advantage that no delimiters are required at the end of the
+     lines in block comments, and it visually separates the comments from 
+     the rest of the program source.  
+
+     (The opening line is slash-asterisk-backslash;
+     the closing line is backslash-asterisk-slash, 
+     and all intervening lines are verticalbar-asterisk-verticalbar.)   
+
+     /*\
+     |*| Longer multi-line comments are entered like this; there is
+     |*| no need to place closing comment delimiters at the right on a
+     |*| line-by-line basis.  This style is derivative from a similar  
+     |*| style often used by Microsoft in sample code.  The reason for
+     |*| this particular style is primarily one of personal esthetics --
+     |*| I think it makes the comments stand out a little better from the
+     |*| code, and it looks more symmetrical.
+     \*/
+ 
+     /*\ This is short one-liner comment.
+     \*/
+ 
+ 2.  Function prototypes and definitions are in the "new" ANSI
+     style.  One advantage the old style had was that you could
+     see the parameters one to a line, and associate short
+     descriptions of each parameter, as in:
+ 
+         int oldfoo(a,b,c) 
+             int a;        // here is a comment about "a"
+             char *b;      // a useful description of "b" goes here
+             long c;       // this is a succinct explanation of c 
+             {
+     
+     Whereas, in the "new" ANSI style, this is usually coded as:
+ 
+         int newfoo(int a, char *b, long c) { 
+
+     There didn't seem to be any *nice* place to put the terse, yet
+     valuable, half-line descriptions of the use or meaning of the
+     function's arguments.  The convention used herein follows the
+     dictates of the new ANSI style, while retaining the readability
+     advantages of the old, as in:
+
+         int myfoo
+             ( int a        /* here is a comment about "a"           */
+             , char *b      /* a useful description of "b" goes here */
+             , long c       /* this is a succinct explanation of c   */
+             )
+             {
+
+                          
+ 3.  Presentation Manager* programs are characterized by nested calls
+     to functions with horribly long names, containing "hungarianized"
+     parameters with even longer names.  Indentation styles that 
+     were appropriate for *nix programs with short variable names no 
+     longer enhance the clarity of the program;  you get a jumble of 
+     lines that are too long to be conveniently read online, with lines 
+     that have been broken at arbitrary places so that they "fit."  
+
+     The approach taken here is to separate every parenthesis and
+     semicolon by a space from its neighboring tokens, except for the
+     parentheses around a cast.  (This part I picked up from Petzold's
+     examples.)  
+
+     When a complete statement can fit on a single line, it is just left 
+     like that.  But when it won't fit all on one line (which happens 
+     frequently) then the line is split at a logical syntactic boundary, 
+     and paired delimiters are shown indented at the same level. 
+ 
+     Indentation levels are a standard four characters everywhere, 
+     (a seven year old article in the Communications of the ACM presented
+     results of a study which showed, for the conditions they described,
+     that indenting four spaces is optimal from the standpoint of user 
+     readability) and tabs are not used.  (It seems that everyone's editor 
+     handles the tabs differently, which reduces the portability of the 
+     "readability" of the code).  Part of this is motivated by a desire
+     to adopt a style that can easily be handled by supporting editor
+     macros and other external utilities.
+
+     The list-separation delimiters (commas) in a vertically-presented
+     list appear BEFORE the item that follows, rather than AFTER
+     the preceding item in the list.  This style thus presents a list
+     either all on one line (horizontally), or vertically with only one
+     item on each separate line.  The visual structure thus parallels
+     the program structure, which is the whole idea behind coding for
+     clarity with indentation.  It also turns out to be easier to edit, 
+     and to use parts of one program as models for another.
+
+     Thus, for example, a WinCreateStdWindow() call would look like:
+
+         hwndFrame = WinCreateStdWindow 
+             ( HWND_DESKTOP       /*  Desktop window is parent.       */
+             , 0L                 /*  Frame style                     */
+             , &flCreate          /*  Frame control flag              */
+             , szMyClassName      /*  Window class name               */
+             , szMyWindowTitle    /*  Window title                    */
+             , 0L                 /*\ A really long comment for a 
+                                  |*|     parameter would look like this.
+                                  \*/
+             , NULL               /*  Resource is in .EXE file        */
+             , ID_MAINWND         /*  Frame window identifier         */
+             , &hwndClient        /*  Client window handle            */ 
+             ) ;
+      
+
+     A "for" loop with long clauses would be indented as:
+
+         for ( pctiCurr =  (*pctiHead).pctiCTINext   
+             ; pctiCurr != pctiHead && (*pctiCurr).hwndCTI != hwndControl
+             ; pctiCurr =  (*pctiCurr).pctiCINext 
+             )  
+             { 
+             /*\ Traverse linked list
+             \*/ 
+             ...
+             }
+
+
+     A structure definition would be coded as:
+
+         typedef struct DBINFO_ 
+             { PDBINFO pdbiDBINext   /* points to next list node     */
+             ; PDBINFO pdbiDBIPrev   /* points to prev list node     */
+             ; HWND    hwndDBI       /* dialog box's window handle   */
+             ; PFNWP   pfnwpDBIProc  /* dialog box's orig winproc    */
+             ; CTINFO  ctiDBICTHead  /* head of a list of controls   */
+             ; 
+             } 
+             DBINFO ;
+
+
+ I hope that these styles will make Presentation Manager programs
+ easier to read, and that it will not be hard for readers to adjust 
+ to the stylistic differences.  
+
+ 24JUN90
+ Brian Buck
+
+* Presentation Manager is trademark of International Business Machines Corporation.
+
+

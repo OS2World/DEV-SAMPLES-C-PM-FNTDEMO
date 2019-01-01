@@ -1,0 +1,60 @@
+; Module Definition File for FntDemo for EASEL Dynalink Library
+;     (c) Copyright Brian J. Buck 1990, All rights reserved.
+;
+;     This program MAY be used for any demonstration or commercial
+;     purpose, except that the source code may NOT be sold.
+;     If you make any change to the program, you must either include
+;     a description of the change with your name while still retaining
+;     this copyright notice, or totally remove this copyright notice,
+;     in which case you may not redistribute the source.
+;     No warranties are given or implied;  you break it and you own
+;     both halves.
+;
+;     This basically means you can't make a profit selling it (not that
+;     this is a realistic possibility, anyway), and if you mess around
+;     with it, either add your name, or remove mine.  The only real
+;     reason to put these copyright notices on is to prevent someone
+;     else from copyrighting your code that omitted the notice,
+;     leading to a situation where you're no longer allowed to use your 
+;     own code.
+;
+;     Brian J. Buck
+;         Internet . . . . :  76666.60@Compuserve.COM
+;         Compuserve . . . :  76666,60
+;         Phone  . . . . . :  (708) 620-5000 
+ 
+LIBRARY      FntDemo    INITINSTANCE    ; Specifies that file being created
+                                        ;     is a dynamic link module.
+ 
+DESCRIPTION 'FntDemo for EASEL Dynalink Library (c) Copyright Brian J. Buck 1990, All rights reserved'
+                                        ; This string is imbedded into the
+                                        ;     library module file.
+ 
+PROTMODE                                ; It will run only in protect mode
+ 
+ 
+DATA        PRELOAD                     ; EASEL requires PRELOAD
+
+CODE        PRELOAD                     ; EASEL requires PRELOAD
+ 
+HEAPSIZE    0                           ; EASEL requirement
+ 
+EXPORTS                                 ; Exports from this library - these
+                                        ;     are the entry points for the
+                                        ;     routines
+    ChangeHANDLE_FontToDefault          @1
+    ChangeHANDLE_FontToPOINTSFACE_      @2
+    ErrMsgFromChangeHANDLEFont          @3   
+
+    MakeHANDLE_PP_COLOR_                @4
+    MakeHANDLE_ForeCOLOR_               @5
+    MakeHANDLE_BackCOLOR_               @6
+    MakeHANDLE_HiliteForeCOLOR_         @7
+    MakeHANDLE_HiliteBackCOLOR_         @8 
+    MakeHANDLE_DisabledForeCOLOR_       @9
+    MakeHANDLE_DisabledBackCOLOR_       @10
+    MakeHANDLE_BorderCOLOR_             @11
+    ErrMsgFromMakeHANDLECOLOR           @12
+ 
+;
+
